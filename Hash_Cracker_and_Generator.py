@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
+# Coded By Zed-Team
+# Channel telegram : @Arch_TM
 
-# Form implementation generated from reading ui file 'untitled.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
 from os import system
 import datetime
 try:
@@ -27,7 +23,7 @@ except:
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(538, 411)
+        mainWindow.resize(536, 411)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("D:/x2ico.1.2.3.9/x2ico/Icons/2394490_0.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         mainWindow.setWindowIcon(icon)
@@ -95,7 +91,6 @@ class Ui_mainWindow(object):
         self.groupBox_2.setGeometry(QtCore.QRect(10, 110, 151, 201))
         self.groupBox_2.setObjectName("groupBox_2")
         self.checkBox = QtWidgets.QCheckBox(self.groupBox_2)
-        self.checkBox.setChecked(True)
         self.checkBox.setGeometry(QtCore.QRect(20, 30, 81, 20))
         font = QtGui.QFont()
         font.setPointSize(9)
@@ -129,6 +124,23 @@ class Ui_mainWindow(object):
         self.textEdit_2.setGeometry(QtCore.QRect(190, 60, 301, 251))
         self.textEdit_2.setObjectName("textEdit_2")
         self.tab_hash_cracker.addTab(self.tab_2, "")
+        self.tab_4 = QtWidgets.QWidget()
+        self.tab_4.setObjectName("tab_4")
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.tab_4)
+        self.lineEdit_3.setGeometry(QtCore.QRect(129, 30, 241, 22))
+        self.lineEdit_3.setMinimumSize(QtCore.QSize(200, 0))
+        self.lineEdit_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.label_6 = QtWidgets.QLabel(self.tab_4)
+        self.label_6.setGeometry(QtCore.QRect(20, 33, 103, 16))
+        self.label_6.setObjectName("label_6")
+        self.textEdit_3 = QtWidgets.QTextEdit(self.tab_4)
+        self.textEdit_3.setGeometry(QtCore.QRect(20, 67, 471, 281))
+        self.textEdit_3.setObjectName("textEdit_3")
+        self.unhash_combo = QtWidgets.QPushButton(self.tab_4)
+        self.unhash_combo.setGeometry(QtCore.QRect(380, 27, 121, 28))
+        self.unhash_combo.setObjectName("unhash_combo")
+        self.tab_hash_cracker.addTab(self.tab_4, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
         self.label = QtWidgets.QLabel(self.tab_3)
@@ -171,8 +183,8 @@ class Ui_mainWindow(object):
         self.tab_hash_cracker.setCurrentIndex(2)
         self.start_crack_hash.clicked.connect(self.tab_crack_hash)
         self.conver_pass_to_hash.clicked.connect(self.tab_generator_hash)
+        self.unhash_combo.clicked.connect(self.tab_unhash_combo)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
-        
     def tab_generator_hash(self):
         u_hash = self.lineEdit_2.text()
         if u_hash == "":self.textEdit_2.append("Please Enter Your Hash")
@@ -340,16 +352,70 @@ class Ui_mainWindow(object):
             else:
                 self.textEdit.append("oops ! Please Check Your Internet")      
         else:
-            self.textEdit.append("Please select one of the options")      
+            self.textEdit.append("Please select one of the options")  
+    def tab_unhash_combo(self):
+
+        try:
+            with open('newcombo.txt','x'):
+                pass
+        except Exception:
+            pass
+        self.textEdit_3.append("*** Unhasher Combo Coded By Zed-Team ***")
+        self.textEdit_3.append("  *** Channel Telegram : @Arch_TM ***")
+
+
+        address_combo = self.lineEdit_3.text()
+        self.textEdit_3.append("Good! Please Wait...")
+        self.textEdit_3.append('-----------------------------------')
+        try:
+            with open(address_combo) as rf:
+                s = ""
+                for i in rf.readlines():
+                    s += i
+                mlist = s.split('\n')
+                for x in mlist:
+                    list0 = "".join(x)
+                    line_combo = list0.split(':')
+                    Hash = line_combo[1]
+                    try:
+                        req = requests.get(f'https://hashtoolkit.com/reverse-hash/?hash={Hash}')
+                    except Exception as e:
+                        print(e)
+                    if req.status_code == 200:
+                        soup = BeautifulSoup(req.text,'html.parser')
+                        try:
+                            cracked = str(soup.find('span',attrs={'title':'decrypted md5 hash'}))
+                            cracked = cracked[33:]
+                            o = cracked.split('</span>')
+                            cracked = "".join(o[0])
+                            
+                            
+                            with open('newcombo.txt','a') as af:
+                                if cracked == "":
+                                    pass
+                                else:
+                                    app.processEvents()
+                                    af.write(f'{line_combo[0]}:{cracked}\n')
+                                    self.textEdit_3.append(f"{line_combo[0]}:{cracked}")
+                        except Exception as er:
+                            print(er)
+                            
+                    else:
+                        print("Please Check Ineternet")
+        except Exception as error:
+            print(error)
+
+        print("Done! Enjoy ...")
+
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
-        mainWindow.setWindowTitle(_translate("mainWindow", "Hash Cracker And Generator By Zed-Team"))
+        mainWindow.setWindowTitle(_translate("mainWindow", "Hash Cracker And Generator"))
         self.groupBox.setTitle(_translate("mainWindow", "Type Hash"))
         self.c_md5.setText(_translate("mainWindow", "MD5"))
         self.checkBox_5.setText(_translate("mainWindow", "SHA512"))
         self.checkBox_3.setText(_translate("mainWindow", "SHA256"))
         self.checkBox_2.setText(_translate("mainWindow", "SHA1"))
-        self.checkBox_4.setText(_translate("mainWindow", "SHA384"))
+        self.checkBox_4.setText(_translate("mainWindow", "SHA356"))
         self.lineEdit.setText(_translate("mainWindow", "Enter Your Hash"))
         self.textEdit.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -364,7 +430,7 @@ class Ui_mainWindow(object):
         self.checkBox.setText(_translate("mainWindow", "MD5"))
         self.checkBox_6.setText(_translate("mainWindow", "SHA1"))
         self.checkBox_7.setText(_translate("mainWindow", "SHA256"))
-        self.checkBox_8.setText(_translate("mainWindow", "SHA384"))
+        self.checkBox_8.setText(_translate("mainWindow", "SHA356"))
         self.checkBox_9.setText(_translate("mainWindow", "SHA512"))
         self.textEdit_2.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -373,6 +439,10 @@ class Ui_mainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*************** Result ***************</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.tab_hash_cracker.setTabText(self.tab_hash_cracker.indexOf(self.tab_2), _translate("mainWindow", "Hash Generator"))
+        self.lineEdit_3.setText(_translate("mainWindow", "combo.txt"))
+        self.label_6.setText(_translate("mainWindow", "Address Combo : "))
+        self.unhash_combo.setText(_translate("mainWindow", "Start Crack"))
+        self.tab_hash_cracker.setTabText(self.tab_hash_cracker.indexOf(self.tab_4), _translate("mainWindow", "unhasher combo"))
         self.label.setText(_translate("mainWindow", "PROGRAMER : Zed-Team"))
         self.label_2.setText(_translate("mainWindow", "GitHub :  https://github.com/zed-team "))
         self.label_3.setText(_translate("mainWindow", "Instagram :  https://www.instagram.com/insta_cra3ked/"))
@@ -387,6 +457,6 @@ if __name__ == "__main__":
     mainWindow = QtWidgets.QMainWindow()
     ui = Ui_mainWindow()
     ui.setupUi(mainWindow)
-    app.processEvents()
     mainWindow.show()
+    app.processEvents()
     sys.exit(app.exec_())
